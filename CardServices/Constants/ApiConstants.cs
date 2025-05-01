@@ -16,5 +16,22 @@
             public static readonly string ApplyCard = $"{BaseUrl}/byber-cards-api/cards/apply/card";
             public static readonly string ActivationCode = $"{BaseUrl}/byber-cards-api/cards/activeCode";
         }
+
+        public static class RSA
+        {
+            public const string PublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq3v1x5+4J6X2Z5g7m1h4" +
+                                            "Yj6c3f";
+            public const string PrivateKey = "";
+        }
+
+        public static class CardConstants
+        {
+            public const string VirtualCard = "Virtual";
+            public const string PhysicalCard = "Physical";
+
+            // Card Types
+            public const string Consumer = "Consumer";
+            public const string Business = "Business";
+        }
     }
 }

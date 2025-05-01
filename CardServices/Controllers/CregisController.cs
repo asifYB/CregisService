@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using CregisService.CardServices.Constants;
 using CregisService.CardServices.Models;
 using CregisService.CardServices.Services;
 using CregisService.CardServices.Services.Helpers;
@@ -18,8 +19,9 @@ namespace CregisService.CardServices.Controllers
             _logger = logger;
         }
 
-        [HttpPost(Name = "CreateCard")]
-        public async Task<IActionResult> CreateCard()
+        [HttpPost]
+        [Route("CreateCard")]
+        public async Task<IActionResult> CreateCard([FromBody] ApplyCardDto applyCard)
         {
             CregisServices cregisServices = new(new CardRequestBuilder());
 
@@ -71,9 +73,9 @@ namespace CregisService.CardServices.Controllers
                     accountNo = "123456789",
                     Association = "Visa"
                 },
-                PublicKey = "publicKey123",
-                PrivateKey = "privateKey123",
-                ApiKey = "apiKey123",
+                PublicKey = ApiConstants.RSA.PublicKey,
+                PrivateKey = ApiConstants.RSA.PrivateKey,
+                ApiKey = ApiConstants.SignKey,
                 Kid = "kid123",
                 TenantId = "tenant123"
             };
