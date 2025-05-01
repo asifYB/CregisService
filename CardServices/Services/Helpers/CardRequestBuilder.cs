@@ -28,7 +28,7 @@ namespace CregisService.CardServices.Services.Helpers
                     idDocumentType = kyc?.docType != null
                                      ? ((DocType)kyc.docType).ToString()
                                      : null,
-                    idDocumentNumber = kyc?.docId,
+                    idDocumentNumber = int.TryParse(kyc?.docId, out var docId) ? docId : (int?)null,
                     residentialAddress = new
                     {
                         line1 = kyc?.address,

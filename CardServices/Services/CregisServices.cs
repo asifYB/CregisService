@@ -35,25 +35,34 @@ namespace CregisService.CardServices.Services
             // 3. Prepare the payload along with signature
             var payload = PrepareRequestPayload(requestData, ApiConstants.CreateCardSignFields);
 
-            Console.WriteLine(payload);
 
             // 4. Send the POST request and get the response
-            var response  = await SendPostRequestAsync<CreateCardResponseData>(endpointConfig, payload);
+            var response = await SendPostRequestAsync<CreateCardResponseData>(endpointConfig, payload);
 
-            // 5. Process the response and convert it to the desired format
-            var result = new ResponseDto()
+            // 5. Process the response and convert it to the desired
+
+            // early return if the response is null
+            if (response.Data is null)
+                return new ResponseDto()
+                {
+                    Status = response.Code,
+                    Remarks = response.Msg
+                };
+
+
+            // 6. Return the response
+            return new ResponseDto()
             {
                 Status = response.Code,
                 cardId = response.Data.CardId,
                 CardNo = "",
                 async = false,
-                referenceId = "",
-                Remarks = "",
-                taskId = "",
+                referenceId = response.Data.Sign,
+                Remarks = response.Msg,
+                taskId = response.Data.Nonce,
             };
 
-            // 6. return the result
-            return result;
+
         }
 
         public Task<CardOperationResDTO> SetPin(CardFreezeDto freeze)
