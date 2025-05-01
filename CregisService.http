@@ -1,6 +1,6 @@
 @CregisService_HostAddress = http://localhost:5131
 
-GET {{CregisService_HostAddress}}/weatherforecast/
+POST {{CregisService_HostAddress}}/CregisServices/
 Accept: application/json
 
 ###
