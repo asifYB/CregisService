@@ -35,6 +35,8 @@ namespace CregisService.CardServices.Services
             // 3. Prepare the payload along with signature
             var payload = PrepareRequestPayload(requestData, ApiConstants.CreateCardSignFields);
 
+            Console.WriteLine(payload);
+
             // 4. Send the POST request and get the response
             var response  = await SendPostRequestAsync<CreateCardResponseData>(endpointConfig, payload);
 

@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Text.Json;
 using CregisService.CardServices.Models;
+using CregisService.CardServices.Models.Enum;
 using CregisService.CardServices.Services.Helpers.Interface;
 
 namespace CregisService.CardServices.Services.Helpers
@@ -11,8 +12,8 @@ namespace CregisService.CardServices.Services.Helpers
         {
             var requestData = new
             {
-                cardType = "Virtual",
-                customerType = "Consumer",
+                cardType = "Virtual",  //can be enum Virtual and Physiscal
+                customerType = "Consumer",  // Business, Consumer
                 kyc = new
                 {
                     applyCard.KYC?.firstName,
@@ -20,8 +21,10 @@ namespace CregisService.CardServices.Services.Helpers
                     dob = applyCard.KYC?.dob != null
                  ? DateTime.Parse(applyCard.KYC.dob).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
                  : null,
-                    idDocumentType = applyCard.KYC?.docType,
-                    idDocumentNumber = applyCard.KYC?.docId,
+                    idDocumentType = applyCard.KYC?.docType != null 
+                ? ((DocType)applyCard.KYC.docType).ToString()
+                : null,  //Allowed values:Passport,Health,NationalID,TaxIDNumber,SocialService,DriversLicense
+                    idDocumentNumber =  applyCard.KYC?.docId,
                     residentialAddress = new
                     {
                         line1 = applyCard.KYC?.address,
@@ -44,7 +47,7 @@ namespace CregisService.CardServices.Services.Helpers
                     applyCard.KYC?.email,
                     otpPhoneNumber = new
                     {
-                        dialCode = applyCard.KYC?.mobileCode,
+                        dialCode = int.TryParse(applyCard.KYC?.mobileCode, out var code) ? code : 0,
                         phoneNumber = applyCard.KYC?.mobile
                     }
                 },

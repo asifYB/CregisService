@@ -38,21 +38,16 @@ namespace CregisService.CardServices.Services.Helpers
             var nonce = Guid.NewGuid().ToString();
 
             // Efficient serialization and processing
-            using var jsonDoc = JsonSerializer.SerializeToDocument(requestData);
-            var payload = jsonDoc.RootElement.Deserialize<Dictionary<string, object>>()
-                ?? throw new InvalidOperationException("Failed to deserialize request payload");
+            var payload = JsonSerializer.Deserialize<Dictionary<string, object>>(requestData) ?? throw new InvalidOperationException("Failed to deserialize the card payload.");
 
             payload["timestamp"] = timestamp;
             payload["nonce"] = nonce;
 
             // Efficient signature generation
-            var signingParams = jsonDoc.RootElement.EnumerateObject()
-            .Where(p => signKeyFields.Contains(p.Name) && p.Value.ValueKind != JsonValueKind.Null)
-            .ToDictionary(
-                p => p.Name,
-                p => (string?)(p.Value.ValueKind == JsonValueKind.String
-                    ? p.Value.GetString()
-                    : p.Value.GetRawText()));
+            var signingParams = payload
+                   .Where(kv => signKeyFields.Contains(kv.Key) && kv.Value != null)
+                   .ToDictionary(kv => kv.Key, kv => kv.Value.ToString());
+
 
             payload["sign"] = _generateRequestSignature.GenerateRequestSignature(
                 signingParams,
