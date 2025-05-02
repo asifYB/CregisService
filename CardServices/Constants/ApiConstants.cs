@@ -23,15 +23,5 @@
                                             "Yj6c3f";
             public const string PrivateKey = "";
         }
-
-        public static class CardConstants
-        {
-            public const string VirtualCard = "Virtual";
-            public const string PhysicalCard = "Physical";
-
-            // Card Types
-            public const string Consumer = "Consumer";
-            public const string Business = "Business";
-        }
     }
 }

@@ -12,12 +12,12 @@ namespace CregisService.CardServices.Services.Helpers
         public string CreateApplyCardRequest(ApplyCardDto applyCard, bool isVirtual)
         {
             var kyc = applyCard.KYC;
-            var cardType = isVirtual ? ApiConstants.CardConstants.VirtualCard : ApiConstants.CardConstants.PhysicalCard;
+            var cardType = isVirtual ? CardTypes.Virtual.ToString() : CardTypes.Physical.ToString();
 
             var requestData = new
             {
                 cardType,
-                customerType = ApiConstants.CardConstants.Consumer,
+                customerType = CustomerTypes.Consumer.ToString(),
                 kyc = new
                 {
                     kyc?.firstName,
