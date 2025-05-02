@@ -32,16 +32,16 @@ namespace DigitalBank.CardsService.Samples
         ////// Task<CardDetailsRespDto> AddCardAddress(UserInfo userInfo, string cardToken);
         //// Task<ResponseDto> CardTopUp(CardTopUpReqDto cardtopupReqDto);
         //// Task<string> CardVerificationCode(CardReqDto cardReqDto);
-        //Task<CardOperationResDTO> CardLock(CardFreezeDto cardLockDto);
+        Task<CardOperationResDTO> CardLock(CardFreezeDto cardLockDto);
         //Task<CustomerBalance> CustomerCards(string uuid, string accountId, ProviderInformationDto providerInformation);
         //CardTypePhysicalDetails CardPhsyicalList(string cardTypeId);
 
-        //Task<CardOperationResDTO> CardUnock(CardFreezeDto cardUnlockDto);
+        Task<CardOperationResDTO> CardUnock(CardFreezeDto cardUnlockDto);
         //// Task<CardWithdrawalRespDto> CardWithdrawal(CardWithdrawalReqDto cardwithdrawalDto);
-        //Task<CardDetailsRespDto> CardDetails(string cardId, ProviderInformationDto providerInformation, string refId = null);
+        Task<CardDetailsRespDto> CardDetails(string cardId, ProviderInformationDto providerInformation, string refId = null);
         //Task<CardOperationResDTO> CardCancellation(CardFreezeDto cancelCardDto);
         //// Task<TaskDetailsRespDto> TaskDetails(TaskDetailsReqDto taskDetailsReqDto);
-        //// Task<string> Transactions();
+         Task<string> Transactions();
         //Task<ActivateCardEventModel> CardStatusUpdate(string taskId, ProviderInformationDto providerInformation);
         //Task<EstimateTopupResponce> EstimateCardTopup(string cardId, string amount, ProviderInformationDto providerInformation, string accountNo);
 
@@ -50,8 +50,8 @@ namespace DigitalBank.CardsService.Samples
 
 
         //// for physical card
-        //Task<BindingResDto> BindCard(BindCardDto bindingReqDto);
-        ////Task<BindingKycResDto> BindingKYC(BindingKYCDto bindingKYCDto);
+        Task<BindingResDto> BindCard(BindCardDto bindingReqDto);
+        //Task<BindingKycResDto> BindingKYC(BindingKYCDto bindingKYCDto);
         //Task<CardDetailResDto> PinQuery(string cardId, ProviderInformationDto providerInformation);
 
 
@@ -104,7 +104,7 @@ namespace DigitalBank.CardsService.Samples
 
         //Task<CardDetailsUppfoResponse> CardBalanceDetails(string cardId, ProviderInformationDto providerInformation);
         //Task<string> AsinxKYCQuery(ReqDto reqDto, ProviderInformationDto provider);
-        //Task<string> ShowListOfCardss(int page, int limt);
+        Task<string> ShowListOfCardss(int page, int limt);
         //Task<ResponseDto> CardHolderInfo(WewallexCardCreation cardCreation, ProviderInformationDto provider);
         //Task AsinxSetCardHolderInfo(string? reqorResPayload, ProviderInformationDto provider);
         //Task<PhotonPayApplyCardDto> PhotonPayRequestResult(PhotonPayCardCreation photonPayCardCreation, string v, ProviderInformationDto provider);
