@@ -9,7 +9,6 @@ namespace CregisService.CardServices.Services.Helpers
 {
     public abstract class CregisBaseService
     {
-        private const string MerchantId = "PXqkHKbwGX";
 
         private readonly HttpClient _httpClient;
         protected readonly APIRequest _apiRequest;
@@ -61,7 +60,7 @@ namespace CregisService.CardServices.Services.Helpers
         {
             using var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
-            _httpClient.DefaultRequestHeaders.Add("merchant-id", MerchantId);
+            _httpClient.DefaultRequestHeaders.Add("merchant-id", ApiConstants.MerchantId);
 
             var response = await _httpClient.PostAsync(url, content);
 

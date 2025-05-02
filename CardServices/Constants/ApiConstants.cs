@@ -4,6 +4,7 @@
     {
         public const string BaseUrl = "https://api-sandbox.byber.cc";
         public const string SignKey = "c6043c5bb7ed4afcba4272f48faa356f";
+        public const string MerchantId = "PXqkHKbwGX";
 
         public static readonly string[] CreateCardSignFields =
             { "cardType", "customerType", "preferredCardName", "timestamp", "nonce" };

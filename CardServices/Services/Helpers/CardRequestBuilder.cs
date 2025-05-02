@@ -33,12 +33,8 @@ namespace CregisService.CardServices.Services.Helpers
                     {
                         line1 = kyc?.address,
                         line2 = kyc?.address,
-                        line3 = "Building C",
-                        line4 = "Central District",
-                        line5 = "Block 12",
                         kyc?.city,
-                        country = kyc?.countryId,
-                        postalCode = kyc?.zipCode
+                        country = kyc?.countryId
                     }
                 },
                 expiryDate = DateTime.TryParse(kyc?.docExpireDate, out var expDate)
@@ -51,11 +47,10 @@ namespace CregisService.CardServices.Services.Helpers
                     kyc?.email,
                     otpPhoneNumber = new
                     {
-                        dialCode = int.TryParse(kyc?.mobileCode, out var code) ? code : (int?)null,
+                        dialCode = int.TryParse(kyc?.mobileCode, out var code) ? code : 0,
                         phoneNumber = kyc?.mobile
                     }
-                },
-                cardDesign = (string?)null
+                }
             };
 
             return JsonSerializer.Serialize(requestData);

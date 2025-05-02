@@ -36,7 +36,7 @@ namespace CregisService.CardServices.Controllers
                     dob = "1990-05-01",
                     nationalityId = "US",
                     email = "asif.test@example.com",
-                    mobileCode = "1",
+                    mobileCode = "+1",
                     mobile = "2345678903",
                     address = "123 Main St",
                     town = "SampleTown",
@@ -69,7 +69,7 @@ namespace CregisService.CardServices.Controllers
                     Status = "Active",
                     UserCreated = "Admin",
                     CardBin = 123456,
-                    CardUserId = "user_123",
+                    CardUserId = "user_7210",
                     accountNo = "123456789",
                     Association = "Visa"
                 },
@@ -86,8 +86,7 @@ namespace CregisService.CardServices.Controllers
 
             return response.Status switch
             {
-                "success" => Ok(response),
-                "error" => BadRequest(response),
+                "200" => Ok(response),
                 _ => StatusCode(500, response)
             };
         }

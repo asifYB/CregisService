@@ -10,6 +10,7 @@ using DigitalBank.CardsService.Samples;
 
 namespace CregisService.CardServices.Services
 {
+
     public class CregisServices : CregisBaseService, IProvicerService
     {
         private readonly ICardRequestBuilder _requestBuilder;
@@ -35,13 +36,11 @@ namespace CregisService.CardServices.Services
             // 3. Prepare the payload along with signature
             var payload = PrepareRequestPayload(requestData, ApiConstants.CreateCardSignFields);
 
-
             // 4. Send the POST request and get the response
             var response = await SendPostRequestAsync<CreateCardResponseData>(endpointConfig, payload);
 
             // 5. Process the response and convert it to the desired
-
-            // early return if the response is null
+            // early return if the response is null because of error
             if (response.Data is null)
                 return new ResponseDto()
                 {
@@ -49,23 +48,49 @@ namespace CregisService.CardServices.Services
                     Remarks = response.Msg
                 };
 
-
             // 6. Return the response
             return new ResponseDto()
             {
                 Status = response.Code,
                 cardId = response.Data.CardId,
                 CardNo = "",
-                async = false,
-                referenceId = response.Data.Sign,
+                referenceId = ApiConstants.MerchantId,
                 Remarks = response.Msg,
                 taskId = response.Data.Nonce,
             };
+        }
 
+        public Task<BindingResDto> BindCard(BindCardDto bindingReqDto)
+        {
+            throw new NotImplementedException();
+        }
 
+        public Task<CardDetailsRespDto> CardDetails(string cardId, ProviderInformationDto providerInformation, string refId = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<CardOperationResDTO> CardLock(CardFreezeDto cardLockDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<CardOperationResDTO> CardUnock(CardFreezeDto cardUnlockDto)
+        {
+            throw new NotImplementedException();
         }
 
         public Task<CardOperationResDTO> SetPin(CardFreezeDto freeze)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> ShowListOfCardss(int page, int limt)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> Transactions()
         {
             throw new NotImplementedException();
         }
