@@ -20,9 +20,39 @@ namespace CregisService.CardServices.Services
             _requestBuilder = requestBuilder;
         }
 
-        public Task<ResponseDto> ApplyPhysicalCard(ApplyCardDto activateCard)
+        public async Task<ResponseDto> ApplyPhysicalCard(ApplyCardDto applyCard)
         {
-            throw new NotImplementedException();
+            //1. Create the request data using the request builder
+            var requestData = _requestBuilder.CreateApplyCardRequest(applyCard: applyCard, isVirtual: false);
+
+            // 2. Get endpoint configuration
+            var endpointConfig = ApiConstants.Endpoints.ApplyCard;
+
+            // 3. Prepare the payload along with signature
+            var payload = PrepareRequestPayload(requestData, ApiConstants.CreateCardSignFields);
+
+            // 4. Send the POST request and get the response
+            var response = await SendPostRequestAsync<CreateCardResponseData>(endpointConfig, payload);
+
+            // 5. Process the response and convert it to the desired
+            // early return if the response is null because of error
+            if (response.Data is null)
+                return new ResponseDto()
+                {
+                    Status = response.Code,
+                    Remarks = response.Msg
+                };
+
+            // 6. Return the response
+            return new ResponseDto()
+            {
+                Status = response.Code,
+                cardId = response.Data.CardId,
+                CardNo = "",
+                referenceId = ApiConstants.MerchantId,
+                Remarks = response.Msg,
+                taskId = response.Data.Nonce,
+            };
         }
 
         public async Task<ResponseDto> ApplyVirtualCard(ApplyCardDto applyCard)

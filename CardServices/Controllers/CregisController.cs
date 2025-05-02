@@ -20,8 +20,8 @@ namespace CregisService.CardServices.Controllers
         }
 
         [HttpPost]
-        [Route("CreateCard")]
-        public async Task<IActionResult> CreateCard([FromBody] ApplyCardDto applyCard)
+        [Route("CreateVirtualCard")]
+        public async Task<IActionResult> CreateVirtualCard([FromBody] ApplyCardDto applyCard)
         {
             CregisServices cregisServices = new(new CardRequestBuilder());
 
@@ -84,6 +84,77 @@ namespace CregisService.CardServices.Controllers
 
             var response = await cregisServices.ApplyVirtualCard(applyCard: applyCardDto);
 
+            return response.Status switch
+            {
+                "200" => Ok(response),
+                _ => StatusCode(500, response)
+            };
+        }
+
+        [HttpPost]
+        [Route("CreatePhysicalCard")]
+        public async Task<IActionResult> CreatePhysicalCard([FromBody] ApplyCardDto applyCard)
+        {
+            CregisServices cregisServices = new(new CardRequestBuilder());
+
+            var applyCardDto = new ApplyCardDto
+            {
+                ProgramId = "12345",
+                KYC = new KYC
+                {
+                    firstName = "Asif",
+                    lastName = "Test",
+                    gender = 1,
+                    dob = "1990-05-01",
+                    nationalityId = "US",
+                    email = "asif.test@example.com",
+                    mobileCode = "+1",
+                    mobile = "2345678903",
+                    address = "123 Main St",
+                    town = "SampleTown",
+                    city = "SampleCity",
+                    state = "SampleState",
+                    zipCode = "12345",
+                    countryId = "USA",
+                    countryIsoThree = "USA",
+                    emergencyContact = "9876543210",
+                    docType = 1,
+                    docId = "1234567",
+                    frontDoc = "frontDocPath",
+                    backDoc = "backDocPath",
+                    docExpireDate = "2030-01-01",
+                    docNeverExpire = 0,
+                    handHoldIdPhoto = "handHoldIdPhotoPath",
+                    bioMatric = "bioMatricData",
+                    photo = "photoPath",
+                    signImage = "signImagePath"
+                },
+                ProviderInformation = new ProviderInformation
+                {
+                    productToken = "productToken123",
+                    Currency = "US",
+                    FirstRechargeAmount = "100.00",
+                    CardOpeningAmount = "50.00",
+                    kyctype = "Basic",
+                    tenantId = "tenant123",
+                    taskId = "task123",
+                    Status = "Active",
+                    UserCreated = "Admin",
+                    CardBin = 123456,
+                    CardUserId = "user_7210",
+                    accountNo = "123456789",
+                    Association = "Visa"
+                },
+                PublicKey = ApiConstants.RSA.PublicKey,
+                PrivateKey = ApiConstants.RSA.PrivateKey,
+                ApiKey = ApiConstants.SignKey,
+                Kid = "kid123",
+                TenantId = "tenant123"
+            };
+
+
+
+            var response = await cregisServices.ApplyPhysicalCard(applyCard: applyCardDto);
             return response.Status switch
             {
                 "200" => Ok(response),
