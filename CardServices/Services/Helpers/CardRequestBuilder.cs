@@ -55,5 +55,15 @@ namespace CregisService.CardServices.Services.Helpers
 
             return JsonSerializer.Serialize(requestData);
         }
+
+        public string CreateCardDetailsRequest(string cardId)
+        {
+            var requestData = new
+            {
+                cardId
+            };
+
+            return JsonSerializer.Serialize(requestData);
+        }
     }
 }
