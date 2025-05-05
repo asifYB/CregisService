@@ -95,23 +95,18 @@ namespace CregisService.CardServices.Services
         public async Task<CardDetailsRespDto> CardDetails(string cardId, ProviderInformationDto providerInformation, string refId = null)
         {  // 1. Prepare request payload
             var requestData = _requestBuilder.CreateCardDetailsRequest(cardId: cardId);
-            var payload = PrepareRequestPayload(requestData, ApiConstants.ShowCardPAN_And_RetreiveCardDetailsSignFields);
+            var payload = PrepareRequestPayload(requestData, ApiConstants.RetreiveCardDetailsSignFields);
 
             // 2. Define endpoints
             var retrieveCardEndpoint = ApiConstants.Endpoints.RetreiveCardDetails;
             var showCardPanEndpoint = ApiConstants.Endpoints.ShowCardPAN;
 
             // 3. Fire parallel requests
-            var cardDetailsTask = SendPostRequestAsync<CardDetailsData>(retrieveCardEndpoint, payload);
-            var panDetailsTask = SendPostRequestAsync<string>(showCardPanEndpoint, payload);
-            await Task.WhenAll(cardDetailsTask, panDetailsTask);
-
-            var cardDetails = await cardDetailsTask;
-            var panEncrypted = await panDetailsTask;
+            var cardDetails = await SendPostRequestAsync<CardDetailsData>(retrieveCardEndpoint, payload);
 
 
             //early return if error occurred
-            if (cardDetails?.Data == null || panEncrypted?.Data == null)
+            if (cardDetails?.Data == null)
                 return new CardDetailsRespDto()
                 {
                     CardNumber = string.Empty,
@@ -120,16 +115,16 @@ namespace CregisService.CardServices.Services
                     ExpirationDate = string.Empty,
                 };
 
-            // 4. Decrypt and manually parse response data
-            var decryptedResponse = DecryptData.DecryptResponseData(panEncrypted.Data, ApiConstants.RSA_PRIVATE_KEY);
-            var values = ParseQueryStringManual(decryptedResponse);
+            //// 4. Decrypt and manually parse response data
+            //var decryptedResponse = DecryptData.DecryptResponseData(panEncrypted.Data, ApiConstants.RSA_PRIVATE_KEY);
+            //var values = ParseQueryStringManual(decryptedResponse);
 
             return new CardDetailsRespDto
             {
-                CardNumber = values.GetValueOrDefault("pan") ?? string.Empty,
+                CardNumber =  string.Empty,
                 CardStatus = cardDetails.Data.Status,
-                Cvv = values.GetValueOrDefault("cvv") ?? string.Empty,
-                ExpirationDate = values.GetValueOrDefault("expiryDate") ?? string.Empty,
+                Cvv = string.Empty,
+                ExpirationDate =  string.Empty,
             };
         }
 

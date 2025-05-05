@@ -42,7 +42,7 @@
             { "cardId", "timestamp", "nonce" };
 
 
-        public static readonly string[] ShowCardPAN_And_RetreiveCardDetailsSignFields =
+        public static readonly string[] RetreiveCardDetailsSignFields =
             { "cardId", "timestamp", "nonce" };
 
         public static class Endpoints
