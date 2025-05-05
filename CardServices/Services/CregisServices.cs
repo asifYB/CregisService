@@ -93,17 +93,16 @@ namespace CregisService.CardServices.Services
         }
 
         public async Task<CardDetailsRespDto> CardDetails(string cardId, ProviderInformationDto providerInformation, string refId = null)
-        {  // 1. Prepare request payload
+        {  
+            // 1. Prepare request payload
             var requestData = _requestBuilder.CreateCardDetailsRequest(cardId: cardId);
             var payload = PrepareRequestPayload(requestData, ApiConstants.RetreiveCardDetailsSignFields);
 
             // 2. Define endpoints
             var retrieveCardEndpoint = ApiConstants.Endpoints.RetreiveCardDetails;
-            var showCardPanEndpoint = ApiConstants.Endpoints.ShowCardPAN;
 
             // 3. Fire parallel requests
             var cardDetails = await SendPostRequestAsync<CardDetailsData>(retrieveCardEndpoint, payload);
-
 
             //early return if error occurred
             if (cardDetails?.Data == null)
@@ -115,6 +114,7 @@ namespace CregisService.CardServices.Services
                     ExpirationDate = string.Empty,
                 };
 
+
             //// 4. Decrypt and manually parse response data
             //var decryptedResponse = DecryptData.DecryptResponseData(panEncrypted.Data, ApiConstants.RSA_PRIVATE_KEY);
             //var values = ParseQueryStringManual(decryptedResponse);
@@ -125,6 +125,32 @@ namespace CregisService.CardServices.Services
                 CardStatus = cardDetails.Data.Status,
                 Cvv = string.Empty,
                 ExpirationDate =  string.Empty,
+            };
+        }
+
+        public async Task<CardDetailsRespDto> CardDetails2(string cardId, ProviderInformationDto providerInformation, string refId = null)
+        {
+            // 1. Prepare request payload
+            var requestData = _requestBuilder.CreateCardDetailsRequest(cardId: cardId);
+            var payload = PrepareRequestPayload(requestData, ApiConstants.ShowPANCardSignFields);
+
+            // 2. Define endpoints
+            var showPANCardEndpoint = ApiConstants.Endpoints.ShowCardPAN;
+
+            // 3. Fire parallel requests
+            var encryptPan = await SendPostRequestAsync<string>(showPANCardEndpoint, payload);
+
+            
+            // 4. Decrypt and manually parse response data
+            var decryptedResponse = DecryptData.DecryptResponseData(encryptPan.Data, ApiConstants.RSA_PRIVATE_KEY);
+            var values = ParseQueryStringManual(decryptedResponse);
+
+            return new CardDetailsRespDto
+            {
+                CardNumber = string.Empty,
+                CardStatus = string.Empty,
+                Cvv = string.Empty,
+                ExpirationDate = string.Empty,
             };
         }
 
