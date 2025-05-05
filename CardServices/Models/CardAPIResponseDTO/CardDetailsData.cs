@@ -38,7 +38,7 @@ namespace CregisService.CardServices.Models.CardAPIResponseDTO
         public SpendControl? SpendControl { get; set; }
 
         [JsonPropertyName("threeDSFowarding")]
-        public bool ThreeDSFowarding { get; set; }
+        public bool? ThreeDSFowarding { get; set; }
 
         [JsonPropertyName("cardDesign")]
         public string? CardDesign { get; set; }
