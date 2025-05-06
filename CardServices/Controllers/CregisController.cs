@@ -161,5 +161,22 @@ namespace CregisService.CardServices.Controllers
                 _ => StatusCode(500, response)
             };
         }
+
+        [HttpPost]
+        [Route("ShowCardDetails")]
+        public async Task<IActionResult> ShowCardDetails([FromBody] string cardId)
+        {
+            CregisServices cregisServices1 = new(new CardRequestBuilder());
+            CregisServices cregisServices2 = new(new CardRequestBuilder());
+
+            var response = await cregisServices1.CardDetails(cardId: "e28266c7-6328-47fa-baeb-78e6e78ea8e2", providerInformation: null);
+            var fullresponse = await cregisServices2.CardDetails(cardId: "e28266c7-6328-47fa-baeb-78e6e78ea8e2", cardDetailsRespDto: response);
+
+            return fullresponse.CardStatus switch
+            {
+                "200" => Ok(fullresponse),
+                _ => StatusCode(500, fullresponse)
+            };
+        }
     }
 }

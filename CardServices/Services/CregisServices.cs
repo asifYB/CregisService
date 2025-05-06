@@ -145,7 +145,7 @@ namespace CregisService.CardServices.Services
             {
                 cardDetailsRespDto.CardNumber = values.GetValueOrDefault("pan") ?? string.Empty;
                 cardDetailsRespDto.Cvv = values.GetValueOrDefault("cvv") ?? string.Empty;
-                cardDetailsRespDto.ExpirationDate = values.GetValueOrDefault("expiry") ?? string.Empty;
+                cardDetailsRespDto.ExpirationDate = values.GetValueOrDefault("expiryDate") ?? string.Empty;
             }
 
             // 6. Return the card details response DTO
