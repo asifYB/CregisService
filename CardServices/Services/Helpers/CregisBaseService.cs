@@ -31,7 +31,7 @@ namespace CregisService.CardServices.Services.Helpers
         protected string PrepareRequestPayload(
             string requestData,
             string[] signKeyFields,
-            string? customSignKey = null)
+            string? reason = null)
         {
             var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             var nonce = Guid.NewGuid().ToString();
@@ -49,8 +49,10 @@ namespace CregisService.CardServices.Services.Helpers
 
 
             payload["sign"] = _generateRequestSignature.GenerateRequestSignature(
-                signingParams,
-                customSignKey ?? ApiConstants.SignKey);
+                signingParams, ApiConstants.SignKey);
+
+            if (reason is not null)
+                payload["reason"] = reason;
 
             var finalPayload = JsonSerializer.Serialize(payload, CachedJsonSerializerOptions);
             return finalPayload;

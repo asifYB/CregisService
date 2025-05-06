@@ -133,7 +133,7 @@ namespace CregisService.CardServices.Services
             // 2. Define endpoints
             var showPANCardEndpoint = ApiConstants.Endpoints.ShowCardPAN;
 
-            // 3. Fire parallel requests
+            // 3. send the request
             var encryptPan = await SendPostRequestAsync<string>(showPANCardEndpoint, payload);
   
             // 4. Decrypt and manually parse response data
@@ -152,9 +152,38 @@ namespace CregisService.CardServices.Services
             return cardDetailsRespDto;
         }
 
-        public Task<CardOperationResDTO> CardLock(CardFreezeDto cardLockDto)
+        public async Task<CardOperationResDTO> CardLock(CardFreezeDto cardLockDto)
         {
-            throw new NotImplementedException();
+            // Ensure the request object is not null
+            if (cardLockDto is null || string.IsNullOrEmpty(cardLockDto.ProviderCardToken))
+                return await Task.FromResult(new CardOperationResDTO());
+
+            // Prepare request payload
+            var requestData = _requestBuilder.CreateCardDetailsRequest(cardId: cardLockDto.ProviderCardToken!);
+
+            var payload = PrepareRequestPayload(requestData, ApiConstants.CardBlockSignFields, reason: "Blocking Card For Testing");
+
+            // Define endpoints
+            var cardBlockEndpoint = ApiConstants.Endpoints.CardBlock;
+
+            // Send request
+            var cardBlockResponse = await SendPostRequestAsync<CardBlockData>(cardBlockEndpoint, payload);
+
+            // early return
+            if (cardBlockResponse.Data is null)
+                return await Task.FromResult(new CardOperationResDTO()
+                {
+                    Status = cardBlockResponse.Code,
+                    Remarks = cardBlockResponse.Msg
+                }); ;
+
+            //  return the actual response
+            return new CardOperationResDTO()
+            {
+                Status = cardBlockResponse.Code,
+                Remarks = cardBlockResponse.Msg + " : " + cardBlockResponse.Data.Block,
+                TaskId = cardBlockResponse.Data.Nonce
+            };
         }
 
         public Task<CardOperationResDTO> CardUnock(CardFreezeDto cardUnlockDto)

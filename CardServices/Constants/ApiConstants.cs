@@ -48,12 +48,16 @@
         public static readonly string[] ShowPANCardSignFields =
             { "cardId", "timestamp", "nonce" };
 
+        public static readonly string[] CardBlockSignFields =
+           { "cardId", "timestamp", "nonce" };
+
         public static class Endpoints
         {
             public static readonly string ApplyCard = $"{BaseUrl}/byber-cards-api/cards/apply/card";
             public static readonly string ActivationCode = $"{BaseUrl}/byber-cards-api/cards/activeCode";
             public static readonly string RetreiveCardDetails= $"{BaseUrl}/byber-cards-api/cards/retrieveCard";
             public static readonly string ShowCardPAN = $"{BaseUrl}/byber-cards-api/cards/cardImportance";
+            public static readonly string CardBlock = $"{BaseUrl}/byber-cards-api/cards/cardBlock";
         }
 
         public static class RSA

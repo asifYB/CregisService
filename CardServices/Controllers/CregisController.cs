@@ -178,5 +178,23 @@ namespace CregisService.CardServices.Controllers
                 _ => StatusCode(500, fullresponse)
             };
         }
+
+        [HttpPost]
+        [Route("BlockCard")]
+        public async Task<IActionResult> BlockCard([FromBody] string cardId)
+        {
+            CregisServices cregisServices = new(new CardRequestBuilder());
+            var cardFreezeDto = new CardFreezeDto()
+            {
+                ProviderCardToken = "e28266c7-6328-47fa-baeb-78e6e78ea8e2"
+            };
+            var response = await cregisServices.CardLock(cardLockDto: cardFreezeDto);
+
+            return response.Status switch
+            {
+                "200" => Ok(response),
+                _ => StatusCode(500, response)
+            };
+        }
     }
 }
