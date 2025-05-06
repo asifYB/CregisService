@@ -101,7 +101,7 @@ namespace CregisService.CardServices.Services
             // 2. Define endpoints
             var retrieveCardEndpoint = ApiConstants.Endpoints.RetreiveCardDetails;
 
-            // 3. Fire parallel requests
+            // 3. send request
             var cardDetails = await SendPostRequestAsync<CardDetailsData>(retrieveCardEndpoint, payload);
 
             //early return if error occurred
@@ -114,11 +114,7 @@ namespace CregisService.CardServices.Services
                     ExpirationDate = string.Empty,
                 };
 
-
-            //// 4. Decrypt and manually parse response data
-            //var decryptedResponse = DecryptData.DecryptResponseData(panEncrypted.Data, ApiConstants.RSA_PRIVATE_KEY);
-            //var values = ParseQueryStringManual(decryptedResponse);
-
+            // return the response dto
             return new CardDetailsRespDto
             {
                 CardNumber =  string.Empty,
@@ -128,7 +124,7 @@ namespace CregisService.CardServices.Services
             };
         }
 
-        public async Task<CardDetailsRespDto> CardDetails2(string cardId, ProviderInformationDto providerInformation, string refId = null)
+        public async Task<CardDetailsRespDto> CardDetails(string cardId, CardDetailsRespDto cardDetailsRespDto)
         {
             // 1. Prepare request payload
             var requestData = _requestBuilder.CreateCardDetailsRequest(cardId: cardId);
@@ -139,19 +135,21 @@ namespace CregisService.CardServices.Services
 
             // 3. Fire parallel requests
             var encryptPan = await SendPostRequestAsync<string>(showPANCardEndpoint, payload);
-
-            
+  
             // 4. Decrypt and manually parse response data
             var decryptedResponse = DecryptData.DecryptResponseData(encryptPan.Data, ApiConstants.RSA_PRIVATE_KEY);
             var values = ParseQueryStringManual(decryptedResponse);
 
-            return new CardDetailsRespDto
+            // 5. Check if the response contains the expected number of values
+            if (values.Count == 6)
             {
-                CardNumber = string.Empty,
-                CardStatus = string.Empty,
-                Cvv = string.Empty,
-                ExpirationDate = string.Empty,
-            };
+                cardDetailsRespDto.CardNumber = values.GetValueOrDefault("pan") ?? string.Empty;
+                cardDetailsRespDto.Cvv = values.GetValueOrDefault("cvv") ?? string.Empty;
+                cardDetailsRespDto.ExpirationDate = values.GetValueOrDefault("expiry") ?? string.Empty;
+            }
+
+            // 6. Return the card details response DTO
+            return cardDetailsRespDto;
         }
 
         public Task<CardOperationResDTO> CardLock(CardFreezeDto cardLockDto)
