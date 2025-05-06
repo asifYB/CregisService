@@ -181,14 +181,43 @@ namespace CregisService.CardServices.Services
             return new CardOperationResDTO()
             {
                 Status = cardBlockResponse.Code,
-                Remarks = cardBlockResponse.Msg + " : " + cardBlockResponse.Data.Block,
+                Remarks = cardBlockResponse.Msg + " : Card Blocked Successfully!",
                 TaskId = cardBlockResponse.Data.Nonce
             };
         }
 
-        public Task<CardOperationResDTO> CardUnock(CardFreezeDto cardUnlockDto)
+        public async Task<CardOperationResDTO> CardUnock(CardFreezeDto cardUnlockDto)
         {
-            throw new NotImplementedException();
+            // Ensure the request object is not null
+            if (cardUnlockDto is null || string.IsNullOrEmpty(cardUnlockDto.ProviderCardToken))
+                return await Task.FromResult(new CardOperationResDTO());
+
+            // Prepare request payload
+            var requestData = _requestBuilder.CreateCardDetailsRequest(cardId: cardUnlockDto.ProviderCardToken!);
+
+            var payload = PrepareRequestPayload(requestData, ApiConstants.CardUnblockSignFields);
+
+            // Define endpoints
+            var cardBlockEndpoint = ApiConstants.Endpoints.CardUnblock;
+
+            // Send request
+            var cardBlockResponse = await SendPostRequestAsync<CardBlockData>(cardBlockEndpoint, payload);
+
+            // early return
+            if (cardBlockResponse.Data is null)
+                return await Task.FromResult(new CardOperationResDTO()
+                {
+                    Status = cardBlockResponse.Code,
+                    Remarks = cardBlockResponse.Msg
+                }); ;
+
+            //  return the actual response
+            return new CardOperationResDTO()
+            {
+                Status = cardBlockResponse.Code,
+                Remarks = cardBlockResponse.Msg + " : Card Unblocked Successfully!",
+                TaskId = cardBlockResponse.Data.Nonce
+            };
         }
 
         public Task<CardOperationResDTO> SetPin(CardFreezeDto freeze)
