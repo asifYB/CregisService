@@ -217,8 +217,8 @@ namespace CregisService.CardServices.Controllers
         }
 
         [HttpPost]
-        [Route("SetPin")]
-        public async Task<IActionResult> SetPinUnblockCard([FromBody] string cardId)
+        [Route("SetCardPin")]
+        public async Task<IActionResult> SetCardPin([FromBody] string cardId)
         {
             CregisServices cregisServices = new(new CardRequestBuilder());
             var cardFreezeDto = new CardFreezeDto()
