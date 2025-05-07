@@ -35,28 +35,6 @@
                                 -----END RSA PRIVATE KEY-----
                                 """;
 
-        public static readonly string[] CreateCardSignFields =
-            { "cardType", "customerType", "preferredCardName", "timestamp", "nonce" };
-
-        public static readonly string[] ActivationCodeSignFields =
-            { "cardId", "timestamp", "nonce" };
-
-
-        public static readonly string[] RetreiveCardDetailsSignFields =
-            { "cardId", "timestamp", "nonce" };
-
-        public static readonly string[] ShowPANCardSignFields =
-            { "cardId", "timestamp", "nonce" };
-
-        public static readonly string[] CardBlockSignFields =
-           { "cardId", "timestamp", "nonce" };
-
-        public static readonly string[] CardUnblockSignFields =
-          { "cardId", "timestamp", "nonce" };
-
-        public static readonly string[] SetPinSignFields =
-          { "cardId", "pin", "timestamp", "nonce" };
-
         public static class Endpoints
         {
             public static readonly string ApplyCard = $"{BaseUrl}/byber-cards-api/cards/apply/card";
