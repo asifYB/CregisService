@@ -65,5 +65,16 @@ namespace CregisService.CardServices.Services.Helpers
 
             return JsonSerializer.Serialize(requestData);
         }
+
+        public string CreateSetPinRequest(string cardId, string pin)
+        {
+            var requestData = new
+            {
+                cardId,
+                pin
+            };
+
+            return JsonSerializer.Serialize(requestData);
+        }
     }
 }

@@ -54,6 +54,9 @@
         public static readonly string[] CardUnblockSignFields =
           { "cardId", "timestamp", "nonce" };
 
+        public static readonly string[] SetPinSignFields =
+          { "cardId", "pin", "timestamp", "nonce" };
+
         public static class Endpoints
         {
             public static readonly string ApplyCard = $"{BaseUrl}/byber-cards-api/cards/apply/card";
@@ -62,6 +65,7 @@
             public static readonly string ShowCardPAN = $"{BaseUrl}/byber-cards-api/cards/cardImportance";
             public static readonly string CardBlock = $"{BaseUrl}/byber-cards-api/cards/cardBlock";
             public static readonly string CardUnblock = $"{BaseUrl}/byber-cards-api/cards/cardUnblock";
+            public static readonly string SetPin = $"{BaseUrl}/byber-cards-api/cards/putPin";
         }
 
         public static class RSA

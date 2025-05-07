@@ -225,9 +225,43 @@ namespace CregisService.CardServices.Services
             };
         }
 
-        public Task<CardOperationResDTO> SetPin(CardFreezeDto freeze)
+        public async Task<CardOperationResDTO> SetPin(CardFreezeDto freeze)
         {
-            throw new NotImplementedException();
+            // Ensure the request object is not null
+            if (freeze is null || string.IsNullOrEmpty(freeze.ProviderCardToken) || string.IsNullOrEmpty(freeze.pinNumber))
+                return await Task.FromResult(new CardOperationResDTO()
+                {
+                    Status = "400",
+                    Remarks = "Invalid request data"
+                });
+
+            // Prepare request payload
+            var requestData = _requestBuilder.CreateSetPinRequest(cardId: freeze.ProviderCardToken!, pin: freeze.pinNumber);
+
+            var payload = PrepareRequestPayload(requestData, ApiConstants.SetPinSignFields);
+
+            // Define endpoints
+            var setCardPinEndpoint = ApiConstants.Endpoints.SetPin;
+
+            // Send request
+            var setCardPinResponse = await SendPostRequestAsync<SetPinData>(setCardPinEndpoint, payload);
+
+            // early return
+            if (setCardPinResponse.Data is null)
+                return await Task.FromResult(new CardOperationResDTO()
+                {
+                    Status = setCardPinResponse.Code,
+                    Remarks = setCardPinResponse.Msg
+                }); ;
+
+            //  return the actual response
+            return new CardOperationResDTO()
+            {
+                Status = setCardPinResponse.Code,
+                Remarks = setCardPinResponse.Msg + " : Card Pin created Successfully!",
+                TaskId = setCardPinResponse.Data.Nonce
+            };
+
         }
 
         public Task<string> ShowListOfCardss(int page, int limt)

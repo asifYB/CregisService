@@ -215,5 +215,25 @@ namespace CregisService.CardServices.Controllers
                 _ => StatusCode(500, response)
             };
         }
+
+        [HttpPost]
+        [Route("SetPin")]
+        public async Task<IActionResult> SetPinUnblockCard([FromBody] string cardId)
+        {
+            CregisServices cregisServices = new(new CardRequestBuilder());
+            var cardFreezeDto = new CardFreezeDto()
+            {
+                ProviderCardToken = "e28266c7-6328-47fa-baeb-78e6e78ea8e2",
+                pinNumber = "1111"
+            };
+
+            var response = await cregisServices.SetPin(freeze: cardFreezeDto);
+
+            return response.Status switch
+            {
+                "200" => Ok(response),
+                _ => StatusCode(500, response)
+            };
+        }
     }
 }
