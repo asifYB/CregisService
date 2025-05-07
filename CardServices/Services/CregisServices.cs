@@ -135,19 +135,24 @@ namespace CregisService.CardServices.Services
 
             // 3. send the request
             var encryptPan = await SendPostRequestAsync<string>(showPANCardEndpoint, payload);
-  
+
             // 4. Decrypt and manually parse response data
-            var decryptedResponse = DecryptData.DecryptResponseData(encryptPan.Data, ApiConstants.RSA_PRIVATE_KEY);
-            var values = ParseQueryStringManual(decryptedResponse);
+            var values = new Dictionary<string, string>();
 
-            // 5. Check if the response contains the expected number of values
-            if (values.Count == 6)
+            if(encryptPan.Data is not null)
             {
-                cardDetailsRespDto.CardNumber = values.GetValueOrDefault("pan") ?? string.Empty;
-                cardDetailsRespDto.Cvv = values.GetValueOrDefault("cvv") ?? string.Empty;
-                cardDetailsRespDto.ExpirationDate = values.GetValueOrDefault("expiryDate") ?? string.Empty;
-            }
+                var decryptedResponse = DecryptData.DecryptResponseData(encryptPan.Data, ApiConstants.RSA_PRIVATE_KEY);
+                values = ParseQueryStringManual(decryptedResponse);
 
+                // 5. Check if the response contains the expected number of values
+                if (values.Count == 6)
+                {
+                    cardDetailsRespDto.CardNumber = values.GetValueOrDefault("pan") ?? string.Empty;
+                    cardDetailsRespDto.Cvv = values.GetValueOrDefault("cvv") ?? string.Empty;
+                    cardDetailsRespDto.ExpirationDate = values.GetValueOrDefault("expiryDate") ?? string.Empty;
+                }
+            }
+            
             // 6. Return the card details response DTO
             return cardDetailsRespDto;
         }

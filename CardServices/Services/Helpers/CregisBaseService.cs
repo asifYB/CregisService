@@ -1,6 +1,8 @@
 ﻿using CregisService.CardServices.Constants;
 using CregisService.CardServices.Core;
 using CregisService.CardServices.Models.CardAPIResponseDTO;
+using HtmlAgilityPack;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -68,9 +70,35 @@ namespace CregisService.CardServices.Services.Helpers
 
             var responseContent = await response.Content.ReadAsStringAsync();
 
+            // early return in case of cloudflaire security error
+            if(!response.IsSuccessStatusCode && response.Content.Headers.ContentType?.MediaType == "text/html")
+                // try to extract the html
+                return ParseHtmlResponse<T>(responseContent, response.StatusCode);
+
             var transportDto = JsonSerializer.Deserialize<BaseResponse<T>>(responseContent, CachedJsonSerializerOptions);
 
             return transportDto;
+        }
+
+        // return the content from html response
+        private BaseResponse<T> ParseHtmlResponse<T>(string response, HttpStatusCode statusCode)
+        {
+            // Try to extract error from HTML
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(response);
+
+            var title = htmlDoc.DocumentNode.SelectSingleNode("//title")?.InnerText;
+            var h1 = htmlDoc.DocumentNode.SelectSingleNode("//h1")?.InnerText;
+            var h2 = htmlDoc.DocumentNode.SelectSingleNode("//h2")?.InnerText;
+
+            var errorMsg = $"{title ?? "HTML error"} - {h1} {h2}".Trim();
+
+            return new BaseResponse<T>
+            {
+                Code = statusCode.ToString(),
+                Msg = errorMsg,
+                Data = default!
+            };
         }
     }
 }
