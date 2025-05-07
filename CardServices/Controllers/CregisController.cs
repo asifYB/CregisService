@@ -224,7 +224,7 @@ namespace CregisService.CardServices.Controllers
             var cardFreezeDto = new CardFreezeDto()
             {
                 ProviderCardToken = "e28266c7-6328-47fa-baeb-78e6e78ea8e2",
-                pinNumber = "1111"
+                pinNumber = "9143"
             };
 
             var response = await cregisServices.SetPin(freeze: cardFreezeDto);

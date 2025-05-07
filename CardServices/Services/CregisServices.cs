@@ -26,7 +26,7 @@ namespace CregisService.CardServices.Services
             var endpointConfig = ApiConstants.Endpoints.ApplyCard;
 
             // 3. Prepare the payload along with signature
-            var payload = PrepareRequestPayload(requestData, ApiConstants.CreateCardSignFields);
+            var payload = PrepareRequestPayload(requestData, PayloadConstants.CreateCardSignFields);
 
             // 4. Send the POST request and get the response
             var response = await SendPostRequestAsync<CreateCardResponseData>(endpointConfig, payload);
@@ -61,7 +61,7 @@ namespace CregisService.CardServices.Services
             var endpointConfig = ApiConstants.Endpoints.ApplyCard;
 
             // 3. Prepare the payload along with signature
-            var payload = PrepareRequestPayload(requestData, ApiConstants.CreateCardSignFields);
+            var payload = PrepareRequestPayload(requestData, PayloadConstants.CreateCardSignFields);
 
             // 4. Send the POST request and get the response
             var response = await SendPostRequestAsync<CreateCardResponseData>(endpointConfig, payload);
@@ -96,7 +96,7 @@ namespace CregisService.CardServices.Services
         {  
             // 1. Prepare request payload
             var requestData = _requestBuilder.CreateCardDetailsRequest(cardId: cardId);
-            var payload = PrepareRequestPayload(requestData, ApiConstants.RetreiveCardDetailsSignFields);
+            var payload = PrepareRequestPayload(requestData, PayloadConstants.RetrieveCardDetailsSignFields);
 
             // 2. Define endpoints
             var retrieveCardEndpoint = ApiConstants.Endpoints.RetreiveCardDetails;
@@ -128,7 +128,7 @@ namespace CregisService.CardServices.Services
         {
             // 1. Prepare request payload
             var requestData = _requestBuilder.CreateCardDetailsRequest(cardId: cardId);
-            var payload = PrepareRequestPayload(requestData, ApiConstants.ShowPANCardSignFields);
+            var payload = PrepareRequestPayload(requestData, PayloadConstants.ShowPANCardSignFields);
 
             // 2. Define endpoints
             var showPANCardEndpoint = ApiConstants.Endpoints.ShowCardPAN;
@@ -166,7 +166,7 @@ namespace CregisService.CardServices.Services
             // Prepare request payload
             var requestData = _requestBuilder.CreateCardDetailsRequest(cardId: cardLockDto.ProviderCardToken!);
 
-            var payload = PrepareRequestPayload(requestData, ApiConstants.CardBlockSignFields, reason: "Blocking Card For Testing");
+            var payload = PrepareRequestPayload(requestData, PayloadConstants.CardBlockSignFields, reason: "Blocking Card For Testing");
 
             // Define endpoints
             var cardBlockEndpoint = ApiConstants.Endpoints.CardBlock;
@@ -200,7 +200,7 @@ namespace CregisService.CardServices.Services
             // Prepare request payload
             var requestData = _requestBuilder.CreateCardDetailsRequest(cardId: cardUnlockDto.ProviderCardToken!);
 
-            var payload = PrepareRequestPayload(requestData, ApiConstants.CardUnblockSignFields);
+            var payload = PrepareRequestPayload(requestData, PayloadConstants.CardUnblockSignFields);
 
             // Define endpoints
             var cardBlockEndpoint = ApiConstants.Endpoints.CardUnblock;
@@ -238,7 +238,7 @@ namespace CregisService.CardServices.Services
             // Prepare request payload
             var requestData = _requestBuilder.CreateSetPinRequest(cardId: freeze.ProviderCardToken!, pin: freeze.pinNumber);
 
-            var payload = PrepareRequestPayload(requestData, ApiConstants.SetPinSignFields);
+            var payload = PrepareRequestPayload(requestData, PayloadConstants.SetPinSignFields);
 
             // Define endpoints
             var setCardPinEndpoint = ApiConstants.Endpoints.SetPin;
