@@ -264,7 +264,7 @@ namespace CregisService.CardServices.Controllers
             var bindCardDto = new BindCardDto()
             {
                 cardid = "e28266c7-6328-47fa-baeb-78e6e78ea8e2",
-                UniqueId = "9143",
+                UniqueId = "185419",
                 CardNo = "1234567890123456",
                 EnvelopeNo = "1234567890",
 
