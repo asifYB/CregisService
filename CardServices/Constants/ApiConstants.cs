@@ -44,6 +44,9 @@
             public static readonly string CardBlock = $"{BaseUrl}/byber-cards-api/cards/cardBlock";
             public static readonly string CardUnblock = $"{BaseUrl}/byber-cards-api/cards/cardUnblock";
             public static readonly string SetPin = $"{BaseUrl}/byber-cards-api/cards/putPin";
+            public static readonly string PinQuery = $"{BaseUrl}/byber-cards-api/cards/activeCode";
+            public static readonly string BindCard = $"{BaseUrl}/byber-cards-api/cards/active";
+
         }
 
         public static class RSA

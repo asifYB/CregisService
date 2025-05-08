@@ -87,10 +87,7 @@ namespace CregisService.CardServices.Services
             };
         }
 
-        public Task<BindingResDto> BindCard(BindCardDto bindingReqDto)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public async Task<CardDetailsRespDto> CardDetails(string cardId, ProviderInformationDto providerInformation, string refId = null)
         {  
@@ -225,6 +222,8 @@ namespace CregisService.CardServices.Services
             };
         }
 
+        
+
         public async Task<CardOperationResDTO> SetPin(CardFreezeDto freeze)
         {
             // Ensure the request object is not null
@@ -262,6 +261,75 @@ namespace CregisService.CardServices.Services
                 TaskId = setCardPinResponse.Data.Nonce
             };
 
+        }
+
+        //this is for physical card to get the pin
+        public async Task<CardDetailResDto> PinQuery(string cardId, ProviderInformationDto providerInformation)
+        {
+            // Ensure the request object is not null
+            if (cardId is null)
+                return await Task.FromResult(new CardDetailResDto());
+
+            // Prepare request payload
+            var requestData = _requestBuilder.CreatePinQueryRequest(cardId: cardId);
+
+            var payload = PrepareRequestPayload(requestData, PayloadConstants.PinQuerySignFields);
+
+            // Define endpoints
+            var pinQueryEndpoint = ApiConstants.Endpoints.PinQuery;
+
+            // Send request
+            var pinQueryResponse = await SendPostRequestAsync<PinQueryData>(pinQueryEndpoint, payload);
+
+            return pinQueryResponse.Data is null ?
+                new CardDetailResDto()
+                {
+                    Pin = string.Empty,
+                    CardNumber = string.Empty,
+                }
+                :
+                new CardDetailResDto()
+                {
+                    Pin = pinQueryResponse.Data.ActivationCode,
+                    CardNumber = string.Empty,
+                };
+        }
+
+        public async Task<BindingResDto> BindCard(BindCardDto bindingReqDto)
+        {
+           if(bindingReqDto is null || bindingReqDto.cardid is null || bindingReqDto.UniqueId is null)
+                return await Task.FromResult(new BindingResDto()
+                {
+                    Status = "400",
+                    Remarks = "Invalid request data"
+                });
+
+            // Prepare request payload
+            var requestData = _requestBuilder.CreateBindCardRequest(cardId: bindingReqDto.cardid!, code: bindingReqDto.UniqueId!);
+            var payload = PrepareRequestPayload(requestData, PayloadConstants.BindCardSignFields);
+
+            // Define endpoints
+            var bindCardEndpoint = ApiConstants.Endpoints.BindCard;
+
+            // Send request
+            var bindCardResponse = await SendPostRequestAsync<BindCardData>(bindCardEndpoint, payload);
+
+
+            // early return
+            if (bindCardResponse.Data is null)
+                return await Task.FromResult(new BindingResDto()
+                {
+                    Status = bindCardResponse.Code,
+                    Remarks = bindCardResponse.Msg
+                });
+
+            //  return the actual response
+            return new BindingResDto()
+            {
+                Status = bindCardResponse.Code,
+                Remarks = bindCardResponse.Msg + " : Card Binded Successfully!",
+                TaskId = bindCardResponse.Data.Nonce
+            };
         }
 
         public Task<string> ShowListOfCardss(int page, int limt)

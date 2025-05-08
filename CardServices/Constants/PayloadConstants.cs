@@ -10,6 +10,7 @@
         public const string Timestamp = "timestamp";
         public const string Nonce = "nonce";
         public const string Pin = "pin";
+        public const string Code = "code";
 
         // Signature field sets
         public static string[] CreateCardSignFields =>
@@ -60,6 +61,21 @@
         [
             CardId,
             Pin,
+            Timestamp,
+            Nonce
+        ];
+
+        public static string[] PinQuerySignFields =>
+        [
+            CardId,
+            Timestamp,
+            Nonce
+        ];
+
+        public static string[] BindCardSignFields =>
+        [
+            CardId,
+            Code,
             Timestamp,
             Nonce
         ];

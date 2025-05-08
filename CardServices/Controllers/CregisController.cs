@@ -235,5 +235,48 @@ namespace CregisService.CardServices.Controllers
                 _ => StatusCode(500, response)
             };
         }
+
+        [HttpPost]
+        [Route("GetActivationPinForPhysicalCard")]
+        public async Task<IActionResult> GetActivationPinForPhysicalCard([FromBody] string cardId)
+        {
+            CregisServices cregisServices = new(new CardRequestBuilder());
+            var cardFreezeDto = new CardFreezeDto()
+            {
+                ProviderCardToken = "e28266c7-6328-47fa-baeb-78e6e78ea8e2",
+                pinNumber = "9143"
+            };
+
+            var response = await cregisServices.PinQuery(cardId: "e28266c7-6328-47fa-baeb-78e6e78ea8e2", providerInformation: null);
+
+            return response.Pin != string.Empty
+                ?
+                Ok(response)
+                :
+                StatusCode(500, response);
+        }
+
+        [HttpPost]
+        [Route("ActivatePhysicalCard")]
+        public async Task<IActionResult> ActivatePhysicalCard([FromBody] string cardId)
+        {
+            CregisServices cregisServices = new(new CardRequestBuilder());
+            var bindCardDto = new BindCardDto()
+            {
+                cardid = "e28266c7-6328-47fa-baeb-78e6e78ea8e2",
+                UniqueId = "9143",
+                CardNo = "1234567890123456",
+                EnvelopeNo = "1234567890",
+
+            };
+
+            var response = await cregisServices.BindCard(bindingReqDto: bindCardDto);
+
+            return response.Status switch
+            {
+                "200" => Ok(response),
+                _ => StatusCode(500, response)
+            };
+        }
     }
 }

@@ -52,7 +52,7 @@ namespace DigitalBank.CardsService.Samples
         //// for physical card
         Task<BindingResDto> BindCard(BindCardDto bindingReqDto);
         //Task<BindingKycResDto> BindingKYC(BindingKYCDto bindingKYCDto);
-        //Task<CardDetailResDto> PinQuery(string cardId, ProviderInformationDto providerInformation);
+        Task<CardDetailResDto> PinQuery(string cardId, ProviderInformationDto providerInformation);
 
 
         //// for internal main provider details 
@@ -63,7 +63,7 @@ namespace DigitalBank.CardsService.Samples
         ////Task submitkycverification(string uuguid, int cardid);
         //Task<ResponseDto> CustomerRegister(object activateCard);
         Task<ResponseDto> ApplyPhysicalCard(ApplyCardDto activateCard);
-        ////Task<ResponseDto> UploadFile(UploadFileReqDto uploadFile);
+        //Task<ResponseDto> UploadFile(UploadFileReqDto uploadFile);
         ////Task<ResponseDto> MerchantListRegistration(object activateCard);
 
         ////Task MerchantListUpdate(MerchantListUpdateDto merchantListUpdate);
